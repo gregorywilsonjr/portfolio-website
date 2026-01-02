@@ -1,0 +1,191 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  background: #000000;
+  overflow: hidden;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.hero-name {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  -webkit-text-stroke: 2px #ff3333;
+  text-shadow: 
+    0 0 10px #ff5544,
+    0 0 20px #ff5544,
+    0 0 30px #ff5544,
+    0 0 40px #e74c3c,
+    0 0 50px #e74c3c,
+    0 0 60px #e74c3c,
+    0 0 70px #e74c3c;
+  animation: name-glow-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes name-glow-pulse {
+  0% {
+    text-shadow: 
+      0 0 10px #ff5544,
+      0 0 20px #ff5544,
+      0 0 30px #ff5544,
+      0 0 40px #e74c3c,
+      0 0 50px #e74c3c,
+      0 0 60px #e74c3c,
+      0 0 70px #e74c3c;
+  }
+  100% {
+    text-shadow: 
+      0 0 15px #ff5544,
+      0 0 25px #ff5544,
+      0 0 35px #ff5544,
+      0 0 50px #e74c3c,
+      0 0 65px #e74c3c,
+      0 0 80px #e74c3c,
+      0 0 95px #e74c3c;
+  }
+}
+
+.hero-title {
+  font-size: 2rem;
+  color: #000000;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  -webkit-text-stroke: 1.5px #ff3333;
+  text-shadow:
+    0 0 6px #ff5544,
+    0 0 12px #ff5544,
+    0 0 18px #e74c3c;
+}
+
+.hero-subtitle {
+  font-size: 15.4pt;
+  color: var(--text-red);
+  margin-bottom: 1.5rem;
+  opacity: 1;
+  font-weight: 700;
+}
+
+.hero-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-red);
+  font-size: 13pt;
+  margin-bottom: 2rem;
+  opacity: 1;
+  font-weight: 700;
+}
+
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.hero-social a {
+  font-size: 2rem;
+  color: var(--text-red);
+  transition: all 0.3s ease;
+}
+
+.hero-social a:hover {
+  color: var(--accent-red);
+  transform: translateY(-5px) scale(1.1);
+  filter: drop-shadow(0 0 10px var(--glow-red));
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--text-red);
+  color: var(--text-red);
+}
+
+.btn-outline:hover {
+  background-color: var(--text-red);
+  color: var(--bg-black);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.scroll-indicator {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--accent-red));
+  animation: scrollBounce 2s infinite;
+  box-shadow: 
+    0 0 20px var(--accent-red),
+    0 0 40px var(--accent-red),
+    0 0 60px var(--accent-red),
+    0 0 80px var(--glow-red);
+  filter: drop-shadow(0 0 10px var(--accent-red)) drop-shadow(0 0 20px var(--accent-red));
+}
+
+@keyframes scrollBounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-name {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-social a {
+    font-size: 1.5rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}

@@ -1,0 +1,125 @@
+.contact-section {
+  background-color: var(--bg-black);
+  padding-bottom: 0;
+}
+
+.contact-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contact-intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.contact-intro p {
+  font-size: 1.2rem;
+  color: var(--text-red);
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+.contact-form-wrapper {
+  margin-bottom: 4rem;
+}
+
+.contact-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.contact-card {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  cursor: pointer;
+  display: block;
+  color: inherit;
+}
+
+.contact-card:hover {
+  transform: translateY(-10px);
+}
+
+.contact-icon {
+  font-size: 3rem;
+  color: var(--accent-red);
+  margin-bottom: 1rem;
+  animation: glow 3s infinite;
+}
+
+.contact-card h3 {
+  font-size: 1.5rem;
+  color: var(--accent-red);
+  margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+  color: var(--text-red);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.contact-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-red);
+  font-size: 1.1rem;
+  padding: 1.5rem;
+  background-color: var(--bg-near-black);
+  border-radius: 8px;
+  border: 1px solid var(--border-red);
+  margin-bottom: 3rem;
+  font-weight: 500;
+}
+
+.contact-location svg {
+  color: var(--accent-red);
+  font-size: 1.3rem;
+}
+
+.footer {
+  background-color: var(--bg-near-black);
+  border-top: 2px solid var(--border-red);
+  padding: 2rem 0;
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.footer p {
+  color: var(--text-red);
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.footer-tagline {
+  font-style: italic;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .contact-intro p {
+    font-size: 1rem;
+  }
+
+  .contact-methods {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-icon {
+    font-size: 2.5rem;
+  }
+
+  .contact-location {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

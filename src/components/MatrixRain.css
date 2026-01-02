@@ -1,0 +1,16 @@
+.matrix-rain {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 0;
+  opacity: 1;
+  pointer-events: none;
+  background-color: #000000;
+}
+
+.matrix-rain-center {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 1200px;
+}

@@ -1,0 +1,111 @@
+.about-section {
+  background-color: var(--bg-black);
+}
+
+.about-content {
+  display: grid;
+  gap: 3rem;
+}
+
+.about-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+.about-text p {
+  margin-bottom: 1.5rem;
+  color: var(--text-red);
+  font-weight: 500;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stat-card {
+  position: relative;
+  background-color: #000;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  isolation: isolate;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #e74c3c, 0 0 20px #e74c3c, 0 0 30px #e74c3c;
+  z-index: -1;
+  transition: all 0.3s ease;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  box-shadow: 0 0 5px #ff5544, 0 0 10px #ff5544, 0 0 20px #ff5544, 0 0 40px #ff5544;
+  z-index: -2;
+  animation: glow-pulse 2s infinite alternate ease-in-out;
+  opacity: 0.7;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px);
+}
+
+.stat-card:hover::before {
+  box-shadow: 0 0 15px #e74c3c, 0 0 35px #e74c3c, 0 0 50px #e74c3c;
+}
+
+.stat-card:hover::after {
+  opacity: 1;
+}
+
+.stat-number {
+  position: relative;
+  z-index: 2;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent-red);
+  margin-bottom: 0.5rem;
+  animation: glow 3s infinite;
+}
+
+.stat-label {
+  position: relative;
+  z-index: 2;
+  font-size: 1rem;
+  color: var(--text-red);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .about-text {
+    font-size: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .about-stats {
+    gap: 1rem;
+  }
+}
