@@ -92,14 +92,32 @@ echo "=========================================="
 echo ""
 
 # Step 1: Upload files to S3
-info "Uploading files to S3..."
+#
+# Two passes, because a single cache-control value cannot suit both. Vite gives
+# everything under assets/ a content hash, so those are safe to pin for a year.
+# index.html keeps its name across deploys, so pinning it would leave visitors
+# on the old build until the CloudFront invalidation reached them.
+info "Uploading fingerprinted assets to S3..."
 if aws s3 sync dist/ "s3://${BUCKET_NAME}" \
     --delete \
+    --exclude "*" \
+    --include "assets/*" \
     --cache-control "public,max-age=31536000,immutable" \
     --profile "$AWS_PROFILE"; then
-    success "Files uploaded to S3"
+    success "Assets uploaded to S3"
 else
-    error "Failed to upload files to S3"
+    error "Failed to upload assets to S3"
+fi
+
+info "Uploading entry point and remaining files..."
+if aws s3 sync dist/ "s3://${BUCKET_NAME}" \
+    --delete \
+    --exclude "assets/*" \
+    --cache-control "public,max-age=0,must-revalidate" \
+    --profile "$AWS_PROFILE"; then
+    success "Entry point uploaded to S3"
+else
+    error "Failed to upload entry point to S3"
 fi
 
 # Step 2: Invalidate CloudFront cache

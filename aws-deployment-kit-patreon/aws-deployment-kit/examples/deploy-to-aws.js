@@ -67,9 +67,18 @@ if (!existsSync('./dist')) {
 
 try {
   // Step 1: Sync files to S3
-  info('Uploading files to S3...');
+  //
+  // Hashed assets are pinned for a year; index.html must revalidate or a
+  // deploy will not reach visitors until the invalidation propagates.
+  info('Uploading fingerprinted assets to S3...');
   execSync(
-    `aws s3 sync dist/ s3://${BUCKET_NAME} --delete --cache-control "public,max-age=31536000,immutable"`,
+    `aws s3 sync dist/ s3://${BUCKET_NAME} --delete --exclude "*" --include "assets/*" --cache-control "public,max-age=31536000,immutable"`,
+    { stdio: 'inherit' }
+  );
+
+  info('Uploading entry point and remaining files...');
+  execSync(
+    `aws s3 sync dist/ s3://${BUCKET_NAME} --delete --exclude "assets/*" --cache-control "public,max-age=0,must-revalidate"`,
     { stdio: 'inherit' }
   );
   success('Files uploaded to S3');
