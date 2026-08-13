@@ -21,7 +21,6 @@ const ThemeSwitcher = ({ hidden = false }) => {
       const handleKeyPress = (e) => {
         if (e.altKey && e.shiftKey && (e.key === 'T' || e.key === 't')) {
           e.preventDefault();
-          console.log('Theme switcher toggled');
           setShowSwitcher(prev => !prev);
         }
       };
