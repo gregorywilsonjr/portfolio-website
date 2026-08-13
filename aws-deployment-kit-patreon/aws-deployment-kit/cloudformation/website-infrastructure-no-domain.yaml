@@ -15,14 +15,21 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Sub '${ProjectName}-${AWS::AccountId}'
-      WebsiteConfiguration:
-        IndexDocument: 'index.html'
-        ErrorDocument: 'index.html'  # For SPA routing
+      # No WebsiteConfiguration: CloudFront reaches the bucket through the REST
+      # endpoint with OAC, and SPA routing is handled by CustomErrorResponses
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
       VersioningConfiguration:
         Status: Enabled
       Tags:
@@ -58,6 +65,62 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
+  # Response headers policy
+  #
+  # Replaces the AWS managed SecurityHeadersPolicy so the site can also send a
+  # Content-Security-Policy and Permissions-Policy, which the managed policy
+  # does not include. Assumes a Vite build with no inline scripts or styles.
+  SecurityHeadersPolicy:
+    Type: 'AWS::CloudFront::ResponseHeadersPolicy'
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub '${ProjectName}-security-headers'
+        Comment: 'Strict security headers for a static SPA'
+        SecurityHeadersConfig:
+          ContentSecurityPolicy:
+            Override: true
+            ContentSecurityPolicy: >-
+              default-src 'self';
+              base-uri 'self';
+              object-src 'none';
+              frame-ancestors 'none';
+              form-action 'self';
+              script-src 'self';
+              style-src 'self';
+              img-src 'self' data:;
+              font-src 'self';
+              connect-src 'self';
+              manifest-src 'self';
+              upgrade-insecure-requests
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            Override: true
+            FrameOption: DENY
+          ReferrerPolicy:
+            Override: true
+            ReferrerPolicy: strict-origin-when-cross-origin
+          StrictTransportSecurity:
+            Override: true
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: false
+        CustomHeadersConfig:
+          Items:
+            - Header: Permissions-Policy
+              Override: true
+              Value: >-
+                accelerometer=(), autoplay=(), camera=(), display-capture=(),
+                encrypted-media=(), fullscreen=(self), geolocation=(),
+                gyroscope=(), magnetometer=(), microphone=(), midi=(),
+                payment=(), usb=()
+            - Header: Cross-Origin-Opener-Policy
+              Override: true
+              Value: same-origin
+            - Header: Cross-Origin-Resource-Policy
+              Override: true
+              Value: same-origin
+
   # CloudFront Distribution (without custom domain or certificate)
   CloudFrontDistribution:
     Type: 'AWS::CloudFront::Distribution'
@@ -69,6 +132,9 @@ Resources:
         HttpVersion: http2and3
         PriceClass: PriceClass_100  # Use only North America and Europe (cheapest)
         ViewerCertificate:
+          # MinimumProtocolVersion cannot be set alongside the default
+          # CloudFront certificate; use the custom-domain template with ACM to
+          # pin TLSv1.2_2021
           CloudFrontDefaultCertificate: true
         Origins:
           - Id: S3Origin
@@ -88,7 +154,7 @@ Resources:
           Compress: true
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # CachingOptimized
           OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf  # CORS-S3Origin
-          ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03  # SecurityHeadersPolicy
+          ResponseHeadersPolicyId: !Ref SecurityHeadersPolicy
         CustomErrorResponses:
           # Handle SPA routing - redirect all errors to index.html
           - ErrorCode: 403

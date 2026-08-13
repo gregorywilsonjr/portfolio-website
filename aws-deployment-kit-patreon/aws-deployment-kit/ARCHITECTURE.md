@@ -259,16 +259,34 @@ s3://your-bucket/
    - Modern cipher suites only
 
 3. **Security Headers**
+
+   Delivered by a custom CloudFront response headers policy defined in the
+   template, rather than the AWS managed policy, so that a Content-Security-Policy
+   and Permissions-Policy can be included.
+
+   - Content-Security-Policy: `default-src 'self'` with no `unsafe-inline`
+   - Strict-Transport-Security: max-age 2 years, includeSubDomains
    - X-Content-Type-Options: nosniff
-   - X-Frame-Options: DENY
-   - X-XSS-Protection: 1; mode=block
+   - X-Frame-Options: DENY (and `frame-ancestors 'none'`)
    - Referrer-Policy: strict-origin-when-cross-origin
+   - Permissions-Policy: browser features denied by default
+   - Cross-Origin-Opener-Policy / Cross-Origin-Resource-Policy: same-origin
+
+   The CSP assumes a Vite build, where every script and style is a separate
+   same-origin file. Introducing an inline `<script>` or a `style=""` attribute
+   requires updating the policy or the asset will be blocked.
+
+   HSTS preload is deliberately left off. Submitting a domain to the browser
+   preload list is effectively irreversible, so it should be a conscious choice
+   rather than a template default.
 
 4. **S3 Bucket Hardening**
    - Block all public access
-   - Encryption at rest (AES-256)
+   - Encryption at rest (AES-256, with S3 Bucket Keys)
+   - Object ownership enforced (ACLs disabled)
    - Versioning enabled
-   - Access logging (optional)
+   - CloudFront access logging to a separate bucket, on by default, with a
+     configurable expiry (`EnableAccessLogging`, `LogRetentionDays`)
 
 ---
 

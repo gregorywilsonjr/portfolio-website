@@ -311,10 +311,19 @@ See **[GUIDE.md](GUIDE.md)** for detailed troubleshooting.
 ### Included in Template
 - ✅ Origin Access Control (OAC) for S3
 - ✅ HTTPS-only (HTTP redirects to HTTPS)
-- ✅ TLS 1.2+ minimum
-- ✅ Security headers policy
-- ✅ S3 bucket encryption
+- ✅ TLS 1.2+ minimum (custom-domain template; the no-domain template uses the
+  default CloudFront certificate, which does not allow pinning a minimum)
+- ✅ Custom security headers policy, including Content-Security-Policy and
+  Permissions-Policy
+- ✅ S3 bucket encryption (AES-256) with object ownership enforced
 - ✅ S3 versioning enabled
+- ✅ CloudFront access logging to a separate, lifecycle-expired bucket
+
+### Not Included — Consider Adding
+- AWS WAF in front of CloudFront (rate limiting, managed rule groups)
+- HSTS preload (the header ships without `preload`; enrolling is irreversible)
+- A least-privilege IAM policy for the deploy principal, rather than reusing
+  broad administrative credentials
 
 ### Additional Recommendations
 - Use IAM users, not root account
