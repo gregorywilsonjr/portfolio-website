@@ -1,0 +1,422 @@
+/* HERO - Terminal Theme */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  background: var(--bg-black);
+  overflow: hidden;
+}
+
+/* Scanline overlay */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 0, 0.03) 2px,
+    rgba(255, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: scanlineMove 8s linear infinite;
+}
+
+@keyframes scanlineMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+/* Terminal grid background */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  text-align: left;
+  animation: bootSequence 1s ease-out;
+  padding: 2rem;
+  background: rgba(12, 12, 12, 0.8);
+  border: 2px solid var(--border-red);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 0, 0.3),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Terminal window header */
+.hero-content::before {
+  content: '┌─[ SYSTEM BOOT SEQUENCE ]─────────────────────────────────────────┐';
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  right: 0;
+  color: var(--accent-red);
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 5px var(--glow-red);
+  letter-spacing: 0;
+}
+
+.hero-content::after {
+  content: '└───────────────────────────────────────────────────────────────────┘';
+  position: absolute;
+  bottom: -2rem;
+  left: 0;
+  right: 0;
+  color: var(--accent-red);
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 5px var(--glow-red);
+  letter-spacing: 0;
+}
+
+.hero-name {
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--text-red);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 
+    0 0 5px var(--glow-red),
+    0 0 10px var(--glow-red),
+    0 0 15px var(--glow-red),
+    2px 2px 0 rgba(0, 0, 0, 0.8);
+  position: relative;
+  animation: textGlitch 5s infinite;
+}
+
+/* Typing cursor effect */
+.hero-name::after {
+  content: '█';
+  animation: blink 1s infinite;
+  margin-left: 10px;
+  color: var(--accent-red);
+}
+
+@keyframes textGlitch {
+  0%, 90%, 100% { transform: translate(0); }
+  91% { transform: translate(-2px, 2px); }
+  92% { transform: translate(2px, -2px); }
+  93% { transform: translate(-2px, -2px); }
+  94% { transform: translate(2px, 2px); }
+  95% { transform: translate(0); }
+}
+
+.hero-title {
+  font-size: 1.8rem;
+  color: var(--accent-red);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px var(--glow-red);
+  position: relative;
+  padding-left: 30px;
+}
+
+.hero-title::before {
+  content: '> ';
+  position: absolute;
+  left: 0;
+  color: var(--bright-red);
+  animation: blink 1s infinite;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-red);
+  margin-bottom: 2rem;
+  font-family: 'Courier New', monospace;
+  line-height: 1.8;
+  opacity: 0.95;
+  padding-left: 30px;
+  position: relative;
+}
+
+.hero-subtitle::before {
+  content: '$ ';
+  position: absolute;
+  left: 0;
+  color: var(--accent-red);
+}
+
+/* System status display */
+.hero-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-red);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  font-family: 'Courier New', monospace;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-left: 4px solid var(--accent-red);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+  position: relative;
+}
+
+.hero-location::before {
+  content: '[LOCATION] ';
+  color: var(--accent-red);
+  font-weight: 700;
+}
+
+.hero-location svg {
+  filter: drop-shadow(0 0 5px var(--glow-red));
+}
+
+.hero-social {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding-left: 30px;
+}
+
+.hero-social a {
+  font-size: 2rem;
+  color: var(--text-red);
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--border-red);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}
+
+.hero-social a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--text-red);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.hero-social a:hover::before {
+  width: 100%;
+}
+
+.hero-social a:hover {
+  color: var(--bg-black);
+  border-color: var(--accent-red);
+  box-shadow: 
+    0 0 20px var(--glow-red),
+    0 0 30px var(--glow-red);
+  transform: translateY(-5px);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-left: 30px;
+}
+
+/* Boot sequence loading bar */
+.hero-content .loading-bar {
+  position: absolute;
+  bottom: -3rem;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-red);
+  overflow: hidden;
+}
+
+.hero-content .loading-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--text-red);
+  box-shadow: 0 0 10px var(--glow-red);
+  animation: bootLoad 3s ease-in-out;
+}
+
+@keyframes bootLoad {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  right: 3rem;
+  z-index: 1;
+  font-family: 'Courier New', monospace;
+  color: var(--text-red);
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px var(--glow-red);
+}
+
+.scroll-indicator {
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--accent-red));
+  animation: scrollBlink 2s infinite;
+  box-shadow: 0 0 10px var(--glow-red);
+  margin: 0 auto;
+  position: relative;
+}
+
+.scroll-indicator::before {
+  content: '▼';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-red);
+  animation: blink 1s infinite;
+}
+
+.scroll-indicator::after {
+  content: '[SCROLL]';
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+@keyframes scrollBlink {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* System messages style */
+.system-info {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--accent-red);
+  text-align: right;
+  line-height: 1.4;
+  opacity: 0.7;
+  text-shadow: 0 0 3px var(--glow-red);
+}
+
+.system-info::before {
+  content: '[ SYSTEM STATUS: ONLINE ]\A[ UPTIME: 99.9% ]\A[ CONNECTION: SECURE ]';
+  white-space: pre;
+}
+
+/* Glitch effect on hover */
+.hero-name:hover {
+  animation: textGlitch 0.3s infinite;
+}
+
+/* CRT Screen flicker on content */
+.hero-content {
+  animation: bootSequence 1s ease-out, subtleFlicker 3s infinite;
+}
+
+@keyframes subtleFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.98; }
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    padding: 1.5rem;
+    text-align: left;
+  }
+
+  .hero-content::before,
+  .hero-content::after {
+    font-size: 0.6rem;
+  }
+
+  .hero-name {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-name::after {
+    margin-left: 5px;
+  }
+
+  .hero-title {
+    font-size: 1.3rem;
+    padding-left: 20px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    padding-left: 20px;
+  }
+
+  .hero-social {
+    padding-left: 20px;
+  }
+
+  .hero-social a {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    padding-left: 20px;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-scroll {
+    bottom: 2rem;
+    right: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .scroll-indicator {
+    height: 40px;
+  }
+
+  .system-info {
+    font-size: 0.6rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}

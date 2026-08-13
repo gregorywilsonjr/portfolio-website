@@ -8,6 +8,7 @@ import Projects from './components/Projects'
 import Certifications from './components/Certifications'
 import Contact from './components/Contact'
 import Navigation from './components/Navigation'
+import ThemeSwitcher from './components/ThemeSwitcher'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
@@ -42,6 +43,7 @@ function App() {
       <Projects />
       <Certifications />
       <Contact />
+      <ThemeSwitcher hidden={true} />
     </div>
   )
 }

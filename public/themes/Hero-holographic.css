@@ -1,0 +1,388 @@
+/* HERO - Holographic Theme */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  background: radial-gradient(ellipse at center, #0d0000 0%, #000000 100%);
+  overflow: hidden;
+}
+
+/* Holographic light rays */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 30% 40%, rgba(255, 23, 68, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(255, 105, 138, 0.15) 0%, transparent 50%);
+  animation: holoRotate 15s linear infinite;
+  z-index: 0;
+}
+
+@keyframes holoRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Floating light particles */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 69, 105, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: particleFloat 10s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-60%, -40%) scale(1.2); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  text-align: center;
+  animation: fadeIn 1.2s ease-out;
+}
+
+.hero-name {
+  font-size: 5.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  position: relative;
+  background: linear-gradient(135deg, var(--hologram-1), var(--hologram-2), var(--hologram-3), var(--hologram-2), var(--hologram-1));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holoGradientFlow 4s ease infinite;
+  filter: drop-shadow(0 0 30px var(--glow-red));
+}
+
+@keyframes holoGradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Glass morphism backdrop for name */
+.hero-name::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
+  background: rgba(255, 23, 68, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 69, 105, 0.2);
+  z-index: -1;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 107, 138, 0.2);
+  animation: glassPulse 3s ease-in-out infinite;
+}
+
+@keyframes glassPulse {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Holographic reflection effect */
+.hero-name::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 107, 138, 0.3), transparent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.hero-title {
+  font-size: 2.3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--accent-red), var(--highlight-red), var(--accent-red));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientSlide 3s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes gradientSlide {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* Glowing orbs beside title */
+.hero-title::before,
+.hero-title::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-red), var(--highlight-red));
+  box-shadow: 
+    0 0 20px var(--glow-red),
+    0 0 40px var(--glow-pink);
+  animation: orbFloat 3s ease-in-out infinite;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hero-title::before {
+  left: -40px;
+}
+
+.hero-title::after {
+  right: -40px;
+  animation-delay: 1.5s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(-50%); opacity: 0.6; }
+  50% { transform: translateY(-70%); opacity: 1; }
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: var(--text-red);
+  margin-bottom: 2rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-shadow: 0 0 20px var(--glow-pink);
+  opacity: 0.9;
+}
+
+.hero-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--accent-red);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 23, 68, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 69, 105, 0.2);
+  display: inline-flex;
+}
+
+.hero-location svg {
+  filter: drop-shadow(0 0 10px var(--glow-red));
+}
+
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.hero-social a {
+  font-size: 2.5rem;
+  color: var(--accent-red);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  padding: 1rem;
+  background: rgba(255, 23, 68, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 69, 105, 0.2);
+}
+
+.hero-social a::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--hologram-1), var(--hologram-2), var(--hologram-3));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  filter: blur(15px);
+}
+
+.hero-social a:hover::before {
+  opacity: 1;
+  animation: holoGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes holoGlow {
+  0%, 100% { filter: blur(15px); }
+  50% { filter: blur(20px); }
+}
+
+.hero-social a:hover {
+  color: var(--highlight-red);
+  transform: translateY(-10px) scale(1.1);
+  border-color: rgba(255, 107, 138, 0.5);
+  box-shadow: 
+    0 10px 30px rgba(255, 23, 68, 0.4),
+    0 0 0 1px rgba(255, 107, 138, 0.3);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.scroll-indicator {
+  width: 4px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--accent-red), var(--highlight-red));
+  animation: scrollFloat 2.5s ease-in-out infinite;
+  border-radius: 10px;
+  box-shadow: 
+    0 0 20px var(--glow-red),
+    0 0 40px var(--glow-pink);
+  position: relative;
+}
+
+.scroll-indicator::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid var(--highlight-red);
+  filter: drop-shadow(0 0 10px var(--glow-pink));
+  animation: arrowBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes scrollFloat {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(15px);
+    opacity: 1;
+  }
+}
+
+@keyframes arrowBounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(5px);
+  }
+}
+
+/* Light beam effect */
+.hero-content .light-beam {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--accent-red));
+  transform: translateX(-50%);
+  animation: beamDescent 3s ease-in-out infinite;
+  opacity: 0.3;
+}
+
+@keyframes beamDescent {
+  0% { top: -100%; opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .hero-name {
+    font-size: 3.2rem;
+    letter-spacing: 3px;
+  }
+
+  .hero-name::before {
+    inset: -20px;
+    border-radius: 20px;
+  }
+
+  .hero-title {
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+
+  .hero-title::before,
+  .hero-title::after {
+    width: 8px;
+    height: 8px;
+  }
+
+  .hero-title::before { left: -25px; }
+  .hero-title::after { right: -25px; }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-social a {
+    font-size: 2rem;
+    padding: 0.75rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}

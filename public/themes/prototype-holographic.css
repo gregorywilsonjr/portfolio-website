@@ -1,0 +1,415 @@
+/* PROTOTYPE 2: HOLOGRAPHIC - Glass morphism, depth layers, iridescent glows, parallax */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-black: #000000;
+  --bg-near-black: #050505;
+  --bg-glass: rgba(20, 0, 0, 0.4);
+  --text-red: #ff1744;
+  --accent-red: #ff4569;
+  --highlight-red: #ff6b8a;
+  --border-red: #ff1744;
+  --glow-red: rgba(255, 23, 68, 0.8);
+  --glow-pink: rgba(255, 105, 138, 0.6);
+  --hologram-1: #ff0044;
+  --hologram-2: #ff3366;
+  --hologram-3: #ff6688;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background: radial-gradient(ellipse at top, #0a0000 0%, #000000 50%, #000000 100%);
+  color: var(--text-red);
+  line-height: 1.6;
+  overflow-x: hidden;
+  font-weight: 400;
+  position: relative;
+}
+
+/* Holographic particle background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 23, 68, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(255, 69, 105, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 107, 138, 0.1) 0%, transparent 50%);
+  z-index: 0;
+  pointer-events: none;
+  animation: holoShift 10s ease-in-out infinite;
+}
+
+@keyframes holoShift {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+/* Floating light orbs */
+body::after {
+  content: '';
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  top: 20%;
+  right: 10%;
+  background: radial-gradient(circle, rgba(255, 23, 68, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: floatOrb 8s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-50px, -80px); }
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--hologram-1), var(--hologram-3));
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--glow-red);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--hologram-3), var(--hologram-1));
+  box-shadow: 0 0 20px var(--glow-pink);
+}
+
+::selection {
+  background-color: var(--text-red);
+  color: var(--bg-black);
+}
+
+a {
+  color: var(--accent-red);
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: radial-gradient(circle, var(--glow-red), transparent);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+a:hover::before {
+  opacity: 0.6;
+}
+
+a:hover {
+  color: var(--highlight-red);
+  text-shadow: 0 0 15px var(--glow-pink);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--text-red), var(--highlight-red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism cards */
+.card {
+  position: relative;
+  background: rgba(10, 0, 0, 0.5);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  isolation: isolate;
+  border: 1px solid rgba(255, 23, 68, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 107, 138, 0.2),
+    inset 0 -1px 0 rgba(255, 23, 68, 0.2);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--hologram-1), var(--hologram-2), var(--hologram-3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 23, 68, 0.1) 50%, transparent 70%);
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: all 0.6s ease;
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 
+    0 20px 60px rgba(255, 23, 68, 0.3),
+    0 0 0 1px rgba(255, 107, 138, 0.5),
+    inset 0 1px 0 rgba(255, 107, 138, 0.4);
+  border-color: rgba(255, 69, 105, 0.6);
+}
+
+.card:hover::before {
+  opacity: 1;
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+.card:hover::after {
+  opacity: 1;
+  top: -100%;
+  left: -100%;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+/* Depth layers effect */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
+  height: 80%;
+  background: radial-gradient(ellipse at center, rgba(255, 23, 68, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  animation: depthPulse 5s ease-in-out infinite;
+}
+
+@keyframes depthPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 0.6; }
+}
+
+.section-title {
+  font-size: 3.5rem;
+  text-align: center;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  position: relative;
+  background: linear-gradient(135deg, var(--hologram-1), var(--hologram-2), var(--hologram-3), var(--hologram-2), var(--hologram-1));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holoGradient 3s ease infinite;
+  filter: drop-shadow(0 0 20px var(--glow-red));
+}
+
+@keyframes holoGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.section-title::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, var(--hologram-1), var(--hologram-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(10px);
+  opacity: 0.5;
+}
+
+.btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: rgba(255, 23, 68, 0.1);
+  color: var(--accent-red);
+  border: 2px solid var(--accent-red);
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-red), var(--hologram-3));
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50px;
+  background: linear-gradient(45deg, var(--hologram-1), var(--hologram-2), var(--hologram-3), var(--hologram-2), var(--hologram-1));
+  background-size: 300% 300%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -2;
+  animation: holoRotate 3s linear infinite;
+}
+
+@keyframes holoRotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:hover::after {
+  opacity: 1;
+}
+
+.btn:hover {
+  color: var(--bg-black);
+  border-color: transparent;
+  box-shadow: 
+    0 8px 30px var(--glow-red),
+    0 0 40px var(--glow-pink);
+  transform: translateY(-3px);
+}
+
+/* Holographic shine effect */
+.holo-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-shine::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+  }
+
+  .card {
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .btn {
+    padding: 0.85rem 2rem;
+  }
+}

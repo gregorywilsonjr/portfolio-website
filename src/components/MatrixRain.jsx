@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import './MatrixRain.css';
 
 const MatrixRain = () => {
-  const canvasRef = useRef(null);
+  const leftCanvasRef = useRef(null);
+  const rightCanvasRef = useRef(null);
 
   useEffect(() => {
-    const setupCanvas = (canvas) => {
+    const setupCanvas = (canvas, isLeftSide) => {
       const ctx = canvas.getContext('2d');
 
       // Set canvas size to match container
@@ -19,6 +20,7 @@ const MatrixRain = () => {
       const chars = '01';
       const fontSize = 16;
       const columns = Math.floor(canvas.width / fontSize);
+      const centerGap = 0; // No gap needed since we're positioning separately
       const trailLength = 15; // Length of the trail
 
       // Array to store drop data for each column
@@ -92,22 +94,28 @@ const MatrixRain = () => {
       return { interval, resizeCanvas };
     };
 
-    const setup = setupCanvas(canvasRef.current);
+    const leftSetup = setupCanvas(leftCanvasRef.current, true);
+    const rightSetup = setupCanvas(rightCanvasRef.current, false);
 
     const handleResize = () => {
-      setup.resizeCanvas();
+      leftSetup.resizeCanvas();
+      rightSetup.resizeCanvas();
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
-      clearInterval(setup.interval);
+      clearInterval(leftSetup.interval);
+      clearInterval(rightSetup.interval);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
-    <canvas ref={canvasRef} className="matrix-rain matrix-rain-center"></canvas>
+    <>
+      <canvas ref={leftCanvasRef} className="matrix-rain matrix-rain-left"></canvas>
+      <canvas ref={rightCanvasRef} className="matrix-rain matrix-rain-right"></canvas>
+    </>
   );
 };
 
