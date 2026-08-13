@@ -183,7 +183,7 @@
 - **Status:** CREATE_IN_PROGRESS (CloudFront creating)
 
 ### Resources Created:
-1. ✅ S3 Bucket: `deployment-kit-test-785138201917`
+1. ✅ S3 Bucket: `deployment-kit-test-123456789012`
 2. ✅ CloudFront OAC: Created successfully
 3. ✅ S3 Bucket Policy: Applied correctly
 4. ⏳ CloudFront Distribution: Creating (expected 10-15 min)

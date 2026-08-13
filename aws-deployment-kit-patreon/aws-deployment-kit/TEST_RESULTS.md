@@ -74,12 +74,12 @@ aws cloudformation create-stack \
 ```
 
 **Result:** PASSED
-- Stack ID: `arn:aws:cloudformation:us-east-1:785138201917:stack/deployment-kit-test/de68cca0-a149-11f0-b8c9-0afff7ebc8e1`
+- Stack ID: `arn:aws:cloudformation:us-east-1:123456789012:stack/deployment-kit-test/de68cca0-a149-11f0-b8c9-0afff7ebc8e1`
 - Status: CREATE_COMPLETE
 - Duration: ~12 minutes
 
 **Resources Created:**
-1. ✅ S3 Bucket: `deployment-kit-test-785138201917`
+1. ✅ S3 Bucket: `deployment-kit-test-123456789012`
 2. ✅ CloudFront OAC: Created successfully
 3. ✅ S3 Bucket Policy: Applied correctly
 4. ✅ CloudFront Distribution: `E14PWKW10GTJEM`
@@ -87,7 +87,7 @@ aws cloudformation create-stack \
 ### Test 3: Stack Outputs ✅
 
 **Outputs Retrieved:**
-- **WebsiteBucketName:** `deployment-kit-test-785138201917`
+- **WebsiteBucketName:** `deployment-kit-test-123456789012`
 - **CloudFrontDistributionId:** `E14PWKW10GTJEM`
 - **CloudFrontURL:** `https://d2qk84j9seocqu.cloudfront.net`
 - **WebsiteURL:** `https://d2qk84j9seocqu.cloudfront.net`
@@ -98,7 +98,7 @@ aws cloudformation create-stack \
 
 **Command:**
 ```bash
-./scripts/deploy.sh deployment-kit-test-785138201917 E14PWKW10GTJEM build
+./scripts/deploy.sh deployment-kit-test-123456789012 E14PWKW10GTJEM build
 ```
 
 **Result:** PASSED
@@ -137,7 +137,7 @@ aws cloudformation create-stack \
 
 **Commands:**
 ```bash
-aws s3 rm s3://deployment-kit-test-785138201917 --recursive --profile build
+aws s3 rm s3://deployment-kit-test-123456789012 --recursive --profile build
 aws cloudformation delete-stack --stack-name deployment-kit-test --region us-east-1 --profile build
 ```
 
