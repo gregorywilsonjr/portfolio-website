@@ -7,6 +7,35 @@ Parameters:
     Default: contact@gregorywilsonjr.com
     Description: Verified SES email address for sending emails
 
+  SESToEmail:
+    Type: String
+    Default: contact@gregorywilsonjr.com
+    Description: Address that receives form submissions
+
+  AllowedOrigin:
+    Type: String
+    Default: 'https://gregorywilsonjr.com'
+    Description: 'Site origin permitted to call this API (scheme + host, no trailing slash)'
+    AllowedPattern: '^https://[a-z0-9.-]+$'
+    ConstraintDescription: 'Must be an https origin such as https://example.com'
+
+  SiteName:
+    Type: String
+    Default: gregorywilsonjr.com
+    Description: Site name shown in the notification email footer
+
+  ThrottleRateLimit:
+    Type: Number
+    Default: 2
+    MinValue: 1
+    Description: Steady-state requests per second allowed against the API
+
+  ThrottleBurstLimit:
+    Type: Number
+    Default: 5
+    MinValue: 1
+    Description: Burst request capacity allowed against the API
+
 Resources:
   # IAM Role for Lambda
   ContactFormLambdaRole:
@@ -27,11 +56,16 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
+              # Scoped to the single verified identity, and further constrained
+              # so a compromised function cannot spoof another From address
               - Effect: Allow
                 Action:
                   - ses:SendEmail
                   - ses:SendRawEmail
-                Resource: '*'
+                Resource: !Sub 'arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/${SESFromEmail}'
+                Condition:
+                  StringEquals:
+                    'ses:FromAddress': !Ref SESFromEmail
 
   # Lambda Function
   ContactFormFunction:
@@ -42,9 +76,14 @@ Resources:
       Handler: index.handler
       Role: !GetAtt ContactFormLambdaRole.Arn
       Timeout: 30
+      # Caps the blast radius of a flood of submissions
+      ReservedConcurrentExecutions: 5
       Environment:
         Variables:
           SES_FROM_EMAIL: !Ref SESFromEmail
+          SES_TO_EMAIL: !Ref SESToEmail
+          ALLOWED_ORIGIN: !Ref AllowedOrigin
+          SITE_NAME: !Ref SiteName
       Code:
         ZipFile: |
           // Placeholder - will be updated via deployment script
@@ -63,7 +102,7 @@ Resources:
       ProtocolType: HTTP
       CorsConfiguration:
         AllowOrigins:
-          - '*'
+          - !Ref AllowedOrigin
         AllowMethods:
           - POST
           - OPTIONS
@@ -95,6 +134,9 @@ Resources:
       ApiId: !Ref ContactFormApi
       StageName: prod
       AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingRateLimit: !Ref ThrottleRateLimit
+        ThrottlingBurstLimit: !Ref ThrottleBurstLimit
 
   # Lambda Permission for API Gateway
   ApiGatewayInvokePermission:
@@ -103,7 +145,7 @@ Resources:
       FunctionName: !Ref ContactFormFunction
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ContactFormApi}/*'
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ContactFormApi}/*/POST/contact'
 
 Outputs:
   ApiEndpoint:
